@@ -1,0 +1,39 @@
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf-8">
+        var socket = io();
+        socket.on('connect', function() {
+            console.log('You have connected as socket id: ' + socket.id)
+        });
+
+        socket.on('status', (message) => {
+            console.log(message);
+            document.getElementById('chat_box').innerHTML += message + '<br/>';
+        });
+
+        player_name = null;
+
+        function set_name(new_name) {
+            player_name = new_name
+            socket.emit('set_name', new_name);
+        }
+
+        function send_chat(message) {
+            if(player_name === null) {
+                alert('Set a name first!');
+                return
+            }
+            socket.emit('chat', message);
+        }
+    </script>
+</head>
+<body>
+Name: <input type="text" id="player_name" onchange="set_name(this.value);"/>
+<br/>
+Message: <input type="text" id="message" onchange="send_chat(this.value);this.value=''"/>
+<br/>
+<br/>
+<div id="chat_box" style="height: 50%; border: 1px solid grey"></div>
+</body>
+</html>
