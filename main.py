@@ -3,9 +3,9 @@ from flask_socketio import SocketIO, emit
 import logging
 from Player import Player
 
-application = Flask(__name__, static_url_path='/static')
+server = Flask(__name__, static_url_path='/static')
 
-socketio = SocketIO(application)
+socketio = SocketIO(server)
 
 players = {}
 
@@ -14,8 +14,8 @@ def emit_status(message):
     emit('status', message, broadcast=True)
 
 
-@application.route('/')
-@application.route('/index.html')
+@server.route('/')
+@server.route('/index.html')
 def send_index():
     return send_file('static/index.html')
 
@@ -52,6 +52,5 @@ def handle_chat(message):
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)  # enable debugging output
-    application.debug = True
-    socketio.run(application)
-
+    server.debug = True
+    socketio.run(server)
